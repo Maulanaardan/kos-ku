@@ -32,7 +32,7 @@ class CustomerResource extends Resource
                     ->label('Nama Customer')
                     ->required(),
 
-                Select::make('room.room_number')
+                Select::make('roomunit.unit_number')
                     ->label('Nomor Kamar')
                     ->relationship('room', 'room_number'),
 
@@ -55,7 +55,7 @@ class CustomerResource extends Resource
                 TextColumn::make('name')
                 ->label('Nama Customer'),
 
-                TextColumn::make('room.room_number')
+                TextColumn::make('roomunit.unit_number')
                 ->label('Nomor Kamar'),
 
                 TextColumn::make('phone')

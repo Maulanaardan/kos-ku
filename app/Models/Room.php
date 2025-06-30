@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
@@ -23,11 +22,16 @@ class Room extends Model
     
     public function bookings()
     {
-        return $this->hasMany(Booking::class);
+        return $this->hasMany(Bookings::class);
     }
 
     public function customer()
     {
         return $this->hasOne(Customer::class);
+    }
+
+    public function roomUnits()
+    {
+        return $this->hasMany(RoomUnit::class);
     }
 }

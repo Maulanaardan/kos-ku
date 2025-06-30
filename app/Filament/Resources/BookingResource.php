@@ -37,6 +37,7 @@ class BookingResource extends Resource
             ->columns([
                 TextColumn::make('user.name')->label('Nama Pemesan'),
                 TextColumn::make('room.name')->label('Kamar'),
+                TextColumn::make('roomunit.unit_number')->label('Nomor Kamar'),
                 TextColumn::make('start_date')->label('Mulai'),
                 TextColumn::make('end_date')->label('Selesai'),
                 BadgeColumn::make('status')->colors([

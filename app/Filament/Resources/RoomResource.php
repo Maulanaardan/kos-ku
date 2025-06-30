@@ -37,7 +37,6 @@ class RoomResource extends Resource
         ->schema([
             TextInput::make('name')->label('Nama Kamar'),
             TextInput::make('description')->label('Deskripsi'),
-            TextInput::make('room_number')->numeric(),
             TextInput::make('capacity')->numeric(),
             TextInput::make('price')->label('Harga'),
             Select::make('is_available')
@@ -70,9 +69,6 @@ class RoomResource extends Resource
             TextColumn::make('description')
                 ->label('Deskripsi')
                 ->limit(30),
-
-            TextColumn::make('room_number')
-                ->label('No. Kamar'),
 
             TextColumn::make('capacity')
                 ->label('Kapasitas'),

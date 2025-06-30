@@ -28,10 +28,22 @@
                     <a href="#contact" class="text-gray-700 hover:text-indigo-600 font-medium">Kontak</a>
                 </div>
 
-                <!-- Call to Action -->
-                <div class="hidden md:flex">
-                    <a href="/login" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Login</a>
-                </div>
+                <!-- Button Login -->
+                <!-- Jika belum login -->
+                @guest
+                    <a href="{{ route('login') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Login</a>
+                @endguest
+
+                <!-- Jika sudah login -->
+                @auth
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-700 font-medium">Halo, {{ Auth::user()->name }}</span>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Logout</button>
+                        </form>
+                    </div>
+                @endauth
 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden">
@@ -89,23 +101,24 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {{-- Card Kamar --}}
             @foreach ($rooms as $room)
-            <div class="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between">
-                <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $room->name }}</h3>
-                <p class="text-gray-600 mb-4">Kapasitas: {{ $room->capacity }} orang</p>
-                </div>
-                @if ($room->is_available)
-                    <a href="{{ route('booking.store') }}"
-                    class="mt-auto inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-center py-2 px-4 rounded-lg transition duration-300">
-                        Lihat Detail
+                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $room->name }}</h3>
+                        <p class="text-gray-600 mb-4">Kapasitas: {{ $room->capacity }} orang</p>
+                    </div>
+
+                    @if ($room->is_fully_booked)
+                        <span class="mt-auto inline-block bg-gray-400 text-white text-center py-2 px-4 rounded-lg cursor-not-allowed opacity-70">
+                            Booked
+                        </span>
+                    @else
+                    <a href="{{ route('booking.create', ['room_id' => $room->id]) }}" class="btn btn-primary">
+                        Booking
                     </a>
-                @else
-                    <span class="mt-auto inline-block bg-gray-400 text-white text-center py-2 px-4 rounded-lg cursor-not-allowed opacity-70">
-                        Booked
-                    </span>
-                @endif
-            </div>
+                    @endif
+                </div>
             @endforeach
+
         </section>   
 
         <section id="facilities" class="py-16 bg-gray-100">
