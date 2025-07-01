@@ -6,6 +6,7 @@ use App\Models\Room;
 use Carbon\Carbon;
 use App\Models\Bookings;
 use App\Models\RoomUnit;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,9 +16,17 @@ class BookingsController extends Controller
     {
         $roomId = $request->input('room_id');
         $selectedRoom = null;
+        $roomunits = collect();
     
         if ($roomId) {
             $selectedRoom = Room::find($roomId);
+            if ($selectedRoom) {
+            $roomunits = RoomUnit::where('room_id', $roomId)
+                ->whereDoesntHave('bookings', function ($query) {
+                    $query->whereIn('status', ['pending', 'confirmed']);
+                })
+                ->get();
+        }
         }
     
         $today = Carbon::today();
@@ -25,23 +34,21 @@ class BookingsController extends Controller
         if (!$roomId && !$request->has('room_id')) {
             $roomunits = collect(); // kosong
         } else {
-            $roomunits = RoomUnit::with('room')
-                ->where('room_id', $roomId)
-                ->whereDoesntHave('bookings', function ($query) use ($today) {
-                    $query->where('start_date', '<=', $today)
-                          ->where('end_date', '>=', $today)
-                          ->where('status', 'confirmed');
-                })
-                ->get();
+            $roomunits = RoomUnit::where('room_id', $roomId)
+            ->whereDoesntHave('bookings', function($query) {
+                $query->whereIn('status', ['pending', 'confirmed']);
+            })
+            ->get();
         }
     
-        return view('booking', compact('roomunits', 'selectedRoom'));
+        return view('booking', compact('roomId', 'roomunits', 'selectedRoom'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'room_unit_id' => 'required|exists:room_units,id',
+            'room_id' => 'required|exists:rooms,id',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
             'notes' => 'nullable|string',
@@ -49,18 +56,22 @@ class BookingsController extends Controller
             'address' => 'required'
         ]);
 
-         // Cek apakah customer sudah ada
-        $existingCustomer = Customer::where('user_id', auth()->id())->first();
+        $existingBooking = Bookings::where('room_unit_id', $validated['room_unit_id'])
+        ->where(function ($query) use ($validated) {
+            $query->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
+                ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']])
+                ->orWhere(function ($q) use ($validated) {
+                    $q->where('start_date', '<=', $validated['start_date'])
+                        ->where('end_date', '>=', $validated['end_date']);
+                });
+        })
+        ->whereIn('status', ['pending', 'confirmed'])
+        ->exists();
 
-        if (!$existingCustomer) {
-            Customer::create([
-                'user_id' => auth()->id(),
-                'name' => auth()->user()->name,
-                'phone' => $validated['phone'],
-                'address' => $validated['address'],
-                'room_id' => RoomUnit::find($validated['room_unit_id'])->room_id,
-            ]);
-        }
+    if ($existingBooking) {
+        return back()->withErrors(['room_unit_id' => 'Unit ini sudah dibooking di tanggal tersebut.'])->withInput();
+    }
+
 
         Bookings::create([
             'user_id' => Auth::id(),
@@ -71,6 +82,7 @@ class BookingsController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('booking.create')->with('success', 'Booking berhasil dikirim! Tunggu konfirmasi dari admin.');
+        return redirect()->route('booking.create', ['room_id' => $validated['room_id']])
+         ->with('success', 'Booking berhasil dikirim!');
     }
 }

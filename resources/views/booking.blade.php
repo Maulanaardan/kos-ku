@@ -31,11 +31,12 @@
 
             <div class="mb-4">
                 <p>Jumlah Unit: {{ $roomunits->count() }}</p>
+                <input type="hidden" name="room_id" value="{{ $selectedRoom->id }}">
                 <label for="room_unit_id" class="block font-medium mb-1">Pilih Kamar (Unit)</label>
                 <select name="room_unit_id" id="room_unit_id" class="form-select w-full border border-gray-300 rounded px-3 py-2">
                     <option value="">Pilih Nomor Unit</option>
                     @foreach ($roomunits as $unit)
-                    <option value="{{ $room->id }}">
+                    <option value="{{ $unit->id }}">
                         {{ $unit->unit_number }} ({{ $unit->room->name }})
                     </option>
                     @endforeach
