@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('room_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('room_id')->nullable()->constrained()->onDelete('cascade')->default(0);
+            $table->foreignId('room_unit_id')->nullable()->constrained()->onDelete('cascade')->default(0);
             $table->string('phone');
             $table->text('address');
             $table->unique(['room_id', 'user_id']);

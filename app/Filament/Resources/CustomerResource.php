@@ -6,6 +6,7 @@ use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
 use App\Models\Room;
+use App\Models\RoomUnit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,12 +18,16 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+
 
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
+
+    protected static ?string $navigationGroup = 'Setting';
 
     public static function form(Form $form): Form
     {
@@ -32,9 +37,13 @@ class CustomerResource extends Resource
                     ->label('Nama Customer')
                     ->required(),
 
-                Select::make('roomunit.unit_number')
+                Select::make('rooms.name')
+                    ->label('Jenis Kamar')
+                    ->relationship('rooms', 'name'),
+
+                    Select::make('room_units.unit_number')
                     ->label('Nomor Kamar')
-                    ->relationship('room', 'room_number'),
+                    ->relationship('room_units', 'unit_number'),
 
                 TextInput::make('phone')
                     ->label('Nomor Telepon')
@@ -53,19 +62,32 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                ->label('Nama Customer'),
+                    ->label('Nama Customer')
+                    ->searchable()
+                    ->sortable(),
 
-                TextColumn::make('roomunit.unit_number')
-                ->label('Nomor Kamar'),
+                TextColumn::make('room.name')
+                    ->label('Jenis Kamar')
+                    ->sortable(),
+
+                TextColumn::make('room_units.unit_number')
+                    ->label('Nomor Kamar')
+                    ->sortable(),
 
                 TextColumn::make('phone')
                     ->label('Nomor Telepon'),
 
                 TextColumn::make('address')
-                    ->label('Alamat')
+                    ->label('Alamat'),
+
+                TextColumn::make('created_at')
+                    ->label('Tanggal Daftar')
+                    ->date('d M Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

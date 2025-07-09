@@ -19,4 +19,9 @@ class RoomUnit extends Model
     {
         return $this->hasMany(Bookings::class);
     }
+    
+    public function customer()
+    {
+        return $this->hasOne(Customer::class);
+    }
 }

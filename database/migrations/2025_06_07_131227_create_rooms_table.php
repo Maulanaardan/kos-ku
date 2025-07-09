@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string("description");
             $table->integer("capacity");
             $table->float("price");
-            $table->boolean("is_available")->default(true);
             $table->string("image");
             $table->timestamps();
         });

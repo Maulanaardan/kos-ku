@@ -29,7 +29,9 @@ class RoomResource extends Resource
 {
     protected static ?string $model = Room::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-home-modern';
+
+    protected static ?string $navigationGroup = 'Room';
 
     public static function form(Form $form): Form
     {
@@ -39,17 +41,16 @@ class RoomResource extends Resource
             TextInput::make('description')->label('Deskripsi'),
             TextInput::make('capacity')->numeric(),
             TextInput::make('price')->label('Harga'),
-            Select::make('is_available')
-                ->options([
-                    1 => 'KOSONG',   // tersedia
-                    0 => 'ISI',
-                ])
-                ->required(),
-            FileUpload::make('image')->label('Gambar'),
+            FileUpload::make('image')
+                ->image()
+                ->disk('public')
+                ->required()
+                ->preserveFilenames() // opsional: biar nama file gak diacak
+                ->imageEditor(),      // opsional editor                  
             CheckboxList::make('facilities')
-            ->label('Fasilitas')
-            ->relationship('facilities', 'name')
-            ->columns(2),
+                ->label('Fasilitas')
+                ->relationship('facilities', 'name')
+                ->columns(2),
         ]);
     }
 
@@ -58,8 +59,12 @@ class RoomResource extends Resource
         return $table
         ->columns([
             ImageColumn::make('image')
-                ->label('Gambar')
-                ->circular(), // opsional: bikin gambar bulat
+            ->label('Gambar')
+            ->disk('public')
+            ->visibility('public') // opsional
+            ->circular()
+            ->height(50)
+            ->width(50),
 
             TextColumn::make('name')
                 ->label('Nama Kamar')
@@ -76,14 +81,6 @@ class RoomResource extends Resource
             TextColumn::make('price')
                 ->label('Harga')
                 ->money('IDR', true),
-
-            IconColumn::make('is_available')
-                ->label('Status')
-                ->boolean()
-                ->trueIcon('heroicon-o-check-circle')
-                ->falseIcon('heroicon-o-x-circle')
-                ->trueColor('success')
-                ->falseColor('danger'),
         ])
         ->filters([])
         ->actions([
