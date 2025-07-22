@@ -9,6 +9,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     </head>
     <body>
 
@@ -17,7 +18,7 @@
                 <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
                 <div class="flex-shrink-0">
-                    <a href="/" class="text-2xl font-bold text-indigo-600">KosKu</a>
+                    <img src="{{asset('image/logo.png')}}" class="w-24"/>
                 </div>
 
                 <!-- Navigation Links -->
@@ -68,8 +69,8 @@
             </div>
         </nav>
 
-        <div class="min-h-screen w-full bg-cover bg-center relative pt-24" style="background-image: url('/images/kos-background.jpg')">
-            <div class="absolute inset-0 bg-black bg-opacity-70"></div>
+        <div id="home" class="min-h-screen w-full bg-cover bg-center relative pt-24" style="background-image: url({{ asset('image/bg-kos.jpg') }});">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
             <div class="relative z-10 flex items-center justify-center min-h-screen">
                 <div class="w-full max-w-[1440px] mx-auto px-0 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center text-white">
                     
@@ -77,14 +78,14 @@
                     <div>
                         <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">Selamat Datang di Kos Nyaman Kita</h1>
                         <p class="text-lg mb-6">Temukan kenyamanan seperti di rumah sendiri. Kos dengan fasilitas lengkap, lokasi strategis, dan harga terjangkau.</p>
-                        <a href="/kamar" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl transition duration-300">
+                        <a href="/kamar" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl transition duration-300 shadow-lg hover:shadow-indigo-500/50">
                             Lihat Kamar
                         </a>
                     </div>
 
                     {{-- Kanan: Gambar --}}
-                    <div class="flex justify-center md:justify-end px-4 md:px-0">
-                        <img src="/images/kamar-example.jpg" alt="Gambar Kamar Kos" class="rounded-2xl shadow-lg max-w-full max-h-[400px]">
+                    <div data-aos="flip-right" class="flex justify-center md:justify-end px-4 md:px-0">
+                        <img src="{{ asset('image/gambar-kos.png') }}" alt="Gambar Kamar Kos" class="rounded-2xl shadow-2xl border-4 border-white/30 max-w-full max-h-[400px] transition-transform duration-500 hover:scale-105">
                     </div>
 
                 </div>
@@ -128,42 +129,42 @@
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-10">
                 {{-- Fasilitas --}}
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                <div data-aos="flip-down" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
                     <div class="text-indigo-600 text-4xl mb-3">📶</div>
                     <h3 class="font-semibold text-lg text-gray-800">WiFi Cepat</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                <div data-aos="flip-down" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
                     <div class="text-indigo-600 text-4xl mb-3">❄️</div>
                     <h3 class="font-semibold text-lg text-gray-800">AC</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                <div data-aos="flip-down" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
                     <div class="text-indigo-600 text-4xl mb-3">🚿</div>
                     <h3 class="font-semibold text-lg text-gray-800">Kamar Mandi Dalam</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                <div data-aos="flip-down" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
                     <div class="text-indigo-600 text-4xl mb-3">🔒</div>
                     <h3 class="font-semibold text-lg text-gray-800">Keamanan 24 Jam</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                <div data-aos="flip-down" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
                     <div class="text-indigo-600 text-4xl mb-3">🔒</div>
                     <h3 class="font-semibold text-lg text-gray-800">Keamanan 24 Jam</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                <div data-aos="flip-down" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
                     <div class="text-indigo-600 text-4xl mb-3">🅿️</div>
                     <h3 class="font-semibold text-lg text-gray-800">Parkir Luas</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                <div data-aos="flip-down" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
                     <div class="text-indigo-600 text-4xl mb-3">🍳</div>
                     <h3 class="font-semibold text-lg text-gray-800">Dapur Bersama</h3>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                <div data-aos="flip-down" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
                     <div class="text-indigo-600 text-4xl mb-3">🧹</div>
                     <h3 class="font-semibold text-lg text-gray-800">Cleaning Service</h3>
                 </div>
@@ -216,7 +217,7 @@
 
                 <!-- Brand & Deskripsi -->
                 <div>
-                <h3 class="text-2xl font-bold text-indigo-500 mb-2">KosKu</h3>
+                <img src="{{asset('image/logo.png')}}" class="w-16"/>
                 <p class="text-gray-400">Kos nyaman dengan fasilitas lengkap dan lokasi strategis di tengah kota.</p>
                 </div>
 
@@ -246,6 +247,11 @@
             </div>
         </footer>
 
-
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init({
+                duration: 1000, // kecepatan animasi (ms)
+            });
+        </script>
     </body>
 </html>
